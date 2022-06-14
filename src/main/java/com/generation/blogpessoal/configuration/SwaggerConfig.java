@@ -17,11 +17,11 @@ public class SwaggerConfig {
 	@Bean
 	public OpenAPI springBlogPessoalOpenAPI() {
 		return new OpenAPI().info(new Info().title("Projeto Blog Pessoal")
-				.description("Blog Pessoal - Projeto Generation Brasil 💖").version("v0.0.1")
-				.license(new License().name("Patrícia Souza")
-						.url("https://www.linkedin.com/in/patricia-souza-developerjava/"))
+				.description("Blog Pessoal - Projeto Generation Brasil 💖")
+				.version("v0.0.1")
+				.license(new License().name("Patrícia Souza").url("https://www.linkedin.com/in/patricia-souza-developerjava/"))
 				.contact(new Contact().name("GitHub 😻").url("https://github.com/PatriciAlves/")
-						.email("patricia.18_08@hotmail.com")));
+				.email("patricia.18_08@hotmail.com")));
 	}
 
 	@Bean
