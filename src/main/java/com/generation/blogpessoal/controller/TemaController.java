@@ -57,11 +57,12 @@ public class TemaController {
 	}
 
 	@PutMapping
-	public ResponseEntity<Tema> putTema(@Valid @RequestBody Tema tema) {
+	public ResponseEntity<?> putTema(@Valid @RequestBody Tema tema) {
 		return temaService.atualizaTema(tema)
 				.map(resp -> ResponseEntity.ok().body(resp))
 				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
 	}
+
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteTema(@PathVariable Long id) {
 		return temaRepository.findById(id).map(resposta -> {
