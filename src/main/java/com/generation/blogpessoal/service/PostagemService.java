@@ -4,11 +4,13 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.generation.blogpessoal.model.Postagem;
 import com.generation.blogpessoal.repository.PostagemRepository;
+import com.generation.blogpessoal.repository.TemaRepository;
 
 @Service
 public class PostagemService {
@@ -16,18 +18,16 @@ public class PostagemService {
 	@Autowired
 	private PostagemRepository postagemRepository;
 
-	public Optional<Postagem> atualizaPostagem(Postagem postagem) {
+	@Autowired
+	private TemaRepository temaRepository;
 
-		if (postagemRepository.findById(postagem.getId()).isPresent()) {
-			Optional<Postagem> buscaPostagem = postagemRepository.findById(postagem.getId());
-
-			if ((buscaPostagem.isPresent()) && (buscaPostagem.get().getId() != postagem.getId()))
-
-				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tema já existente no nosso sistema", null);
-
-			return Optional.ofNullable(postagemRepository.save(postagem));
+	public ResponseEntity<Postagem> atualizaPostagem(Postagem postagem) {
+		Optional<Postagem> atualizaPostagem = postagemRepository.findById(postagem.getUsuario().getId());
+		if (atualizaPostagem.isPresent() && (postagemRepository.existsById(postagem.getId()))) {
+			return temaRepository.findById(postagem.getTema().getId())
+					.map(resp -> ResponseEntity.status(HttpStatus.OK).body(postagemRepository.save(postagem)))
+					.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "O tema não existe", null));
 		}
-		return Optional.empty();
-
+		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O Usuário não existe!", null);
 	}
 }
