@@ -23,19 +23,18 @@ public class PostagemService {
 	@Autowired
 	private TemaRepository temaRepository;
 
-
+	private UsuarioRepository usuarioRepository;
 
 	public ResponseEntity<Postagem> atualizaPostagem(Postagem postagem) {
-		if (postagemRepository.existsById(postagem.getId())) {
+		if (usuarioRepository.existsById(postagem.getUsuario().getId())) {
+			if (postagemRepository.existsById(postagem.getId())) 
+				if (temaRepository.existsById(postagem.getTema().getId()))
+					return ResponseEntity.status(HttpStatus.OK).body(postagemRepository.save(postagem));
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 
-			if (temaRepository.existsById(postagem.getTema().getId()))
-				return ResponseEntity.status(HttpStatus.OK).body(postagemRepository.save(postagem));
+			}
 
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
-
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-	}
-
+	
 }
