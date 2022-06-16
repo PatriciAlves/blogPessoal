@@ -14,9 +14,11 @@ import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Setter
+@Getter
 @Entity
 @Table(name = "tb_temas")
 public class Tema {
@@ -33,6 +35,19 @@ public class Tema {
 	@OneToMany(mappedBy = "tema", cascade = CascadeType.REMOVE)
 	@JsonIgnoreProperties("tema")
 	private List<Postagem> postagem;
+
+
+	public Tema(Long id, String descricao) {
+		super();
+		this.id = id;
+		this.descricao = descricao;
+	}
+
+
+	public Tema() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	
 	

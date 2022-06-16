@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.generation.blogpessoal.model.Tema;
 import com.generation.blogpessoal.repository.TemaRepository;
+import com.generation.blogpessoal.service.TemaService;
 
 @RestController
 @RequestMapping("/temas")
@@ -28,6 +29,9 @@ public class TemaController {
 	
 	@Autowired
 	private TemaRepository temaRepository;
+	
+	@Autowired
+	private TemaService temaService;
 	
 	@GetMapping
 	public ResponseEntity<List<Tema>> getAll() {
@@ -48,21 +52,16 @@ public class TemaController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Tema> putTema(@Valid @RequestBody Tema tema) {
+	public ResponseEntity<Tema> postTema(@Valid @RequestBody Tema tema) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(temaRepository.save(tema));
 	}
 
 	@PutMapping
-	public ResponseEntity<?> postTema(@Valid @RequestBody Tema tema) {
-		if (tema.getId() == null) {
-			return new ResponseEntity<String>("Porfavor informe o ID da postagem que deseja atualizar",
-					HttpStatus.BAD_REQUEST);
-		} else {
-
-			return ResponseEntity.status(HttpStatus.OK).body(temaRepository.save(tema));
-		}
+	public ResponseEntity<Tema> putTema(@Valid @RequestBody Tema tema) {
+		return temaService.atualizaTema(tema)
+				.map(resp -> ResponseEntity.ok().body(resp))
+				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
 	}
-
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteTema(@PathVariable Long id) {
 		return temaRepository.findById(id).map(resposta -> {
