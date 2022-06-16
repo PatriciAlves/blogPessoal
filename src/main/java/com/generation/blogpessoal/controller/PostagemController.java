@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.generation.blogpessoal.model.Postagem;
+import com.generation.blogpessoal.model.Tema;
 import com.generation.blogpessoal.repository.PostagemRepository;
-import com.generation.blogpessoal.repository.TemaRepository;
 import com.generation.blogpessoal.service.PostagemService;
 
 @RestController
@@ -58,13 +58,13 @@ public class PostagemController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(postagemRepository.save(postagem));
 	}
 
-	@PutMapping()
-	public ResponseEntity<Postagem> putPostagem(@Valid @RequestBody Postagem postagem) {
+	@PutMapping
+	public ResponseEntity<?> putPostagem(@Valid @RequestBody Postagem postagem) {
 		return postagemService.atualizaPostagem(postagem)
 				.map(resp -> ResponseEntity.ok().body(resp))
 				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
-	
 	}
+
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deletePostagem(@PathVariable Long id) {

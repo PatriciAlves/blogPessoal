@@ -9,28 +9,22 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.generation.blogpessoal.model.Postagem;
 import com.generation.blogpessoal.repository.PostagemRepository;
-import com.generation.blogpessoal.repository.TemaRepository;
 
 
 @Service
 public class PostagemService {
-	
+
 	@Autowired
 	private PostagemRepository postagemRepository;
-	
-	@Autowired
-	private TemaRepository temaRepository;
-	
-	
-	public Optional<Postagem> atualizaPostagem(Postagem postagem){
-		if (postagemRepository.existsById(postagem.getId())&&
-			temaRepository.existsById(postagem.getTema().getId()))
-		{
-			Optional<Postagem> buscaPostagem = postagemRepository.findByPostagem(postagem.getTexto());
-			if ((buscaPostagem.isPresent()) && (buscaPostagem.get().getId() != postagem.getId()))
-				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Falha ao atualizar",
-						null);
-			
+
+
+	public Optional<Postagem> atualizaPostagem(Postagem postagem) {
+		if (postagemRepository.findById(postagem.getId()).isPresent()) {
+			Optional<Postagem> buscaPostagem = postagemRepository.findById(postagem.getId());
+
+			if ((buscaPostagem.isPresent()) && (buscaPostagem.get().getTema().getId() != postagem.getId()))
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tema já existente no nosso sistema", null);
+
 			return Optional.ofNullable(postagemRepository.save(postagem));
 		}
 		return Optional.empty();
