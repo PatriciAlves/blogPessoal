@@ -60,7 +60,7 @@ public class PostagemController {
 
 	@PutMapping()
 	public ResponseEntity<Postagem> putPostagem(@Valid @RequestBody Postagem postagem) {
-		return postagemService.atualizaTema(postagem)
+		return postagemService.atualizaPostagem(postagem)
 				.map(resp -> ResponseEntity.ok().body(resp))
 				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
 	
