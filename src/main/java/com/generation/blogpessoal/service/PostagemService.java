@@ -22,17 +22,20 @@ public class PostagemService {
 
 	@Autowired
 	private TemaRepository temaRepository;
-	
-	@Autowired
-	private UsuarioRepository usuarioRepository;
-	
+
+
+
 	public ResponseEntity<Postagem> atualizaPostagem(Postagem postagem) {
-		Optional<Usuario> atualizaPostagem = usuarioRepository.findById(postagem.getUsuario().getId());
-		if (atualizaPostagem.isPresent() && (postagemRepository.existsById(postagem.getId()))) {
-			return temaRepository.findById(postagem.getTema().getId())
-					.map(resp -> ResponseEntity.status(HttpStatus.OK).body(postagemRepository.save(postagem)))
-					.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "O tema não existe", null));
+		if (postagemRepository.existsById(postagem.getId())) {
+
+			if (temaRepository.existsById(postagem.getTema().getId()))
+				return ResponseEntity.status(HttpStatus.OK).body(postagemRepository.save(postagem));
+
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+
 		}
-		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O Usuário não existe!", null);
+
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
+
 }
