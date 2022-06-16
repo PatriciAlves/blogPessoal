@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.generation.blogpessoal.model.Postagem;
 import com.generation.blogpessoal.repository.PostagemRepository;
 import com.generation.blogpessoal.repository.TemaRepository;
+import com.generation.blogpessoal.service.PostagemService;
 
 @RestController
 @RequestMapping("/postagens")
@@ -30,7 +31,9 @@ public class PostagemController {
 	private PostagemRepository postagemRepository;
 	
 	@Autowired
-	private TemaRepository temaRepository;
+	private PostagemService postagemService;
+	
+	
 
 	@GetMapping
 	public ResponseEntity<List<Postagem>> getAll() {
@@ -57,19 +60,16 @@ public class PostagemController {
 
 	@PutMapping()
 	public ResponseEntity<Postagem> putPostagem(@Valid @RequestBody Postagem postagem) {
-		if (postagemRepository.existsById(postagem.getId())&& temaRepository.existsById(postagem.getTema().getId())) {
-			return ResponseEntity.ok(postagemRepository.save(postagem));
-		} else {
-
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
+		return postagemService.atualizaTema(postagem)
+				.map(resp -> ResponseEntity.ok().body(resp))
+				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+	
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deletePostagem(@PathVariable Long id) {
 		return postagemRepository.findById(id).map(resposta -> {
 			postagemRepository.deleteById(id);
-			System.out.println("Id deletado");
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
 		}).orElse(ResponseEntity.notFound().build());

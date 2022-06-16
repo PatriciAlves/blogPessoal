@@ -65,8 +65,8 @@ public class TemaController {
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteTema(@PathVariable Long id) {
-		return temaRepository.findById(id).map(resposta -> {
-			temaRepository.deleteById(id);
+		return temaRepository.findById(id)
+			.map(resposta -> {temaRepository.deleteById(id);
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
 		}).orElse(ResponseEntity.notFound().build());
