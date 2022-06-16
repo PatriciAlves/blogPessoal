@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.generation.blogpessoal.model.Postagem;
+import com.generation.blogpessoal.model.Usuario;
 import com.generation.blogpessoal.repository.PostagemRepository;
 import com.generation.blogpessoal.repository.TemaRepository;
+import com.generation.blogpessoal.repository.UsuarioRepository;
 
 @Service
 public class PostagemService {
@@ -20,9 +22,12 @@ public class PostagemService {
 
 	@Autowired
 	private TemaRepository temaRepository;
-
+	
+	@Autowired
+	private UsuarioRepository usuarioRepository;
+	
 	public ResponseEntity<Postagem> atualizaPostagem(Postagem postagem) {
-		Optional<Postagem> atualizaPostagem = postagemRepository.findById(postagem.getUsuario().getId());
+		Optional<Usuario> atualizaPostagem = usuarioRepository.findById(postagem.getUsuario().getId());
 		if (atualizaPostagem.isPresent() && (postagemRepository.existsById(postagem.getId()))) {
 			return temaRepository.findById(postagem.getTema().getId())
 					.map(resp -> ResponseEntity.status(HttpStatus.OK).body(postagemRepository.save(postagem)))
