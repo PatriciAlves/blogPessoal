@@ -43,6 +43,8 @@ public class Usuario {
 	
 	private String foto;
 	
+	private String tipo;
+	
 	@OneToMany(mappedBy = "usuario", cascade = CascadeType.REMOVE)
 	@JsonIgnoreProperties("usuario")
 	public List<Postagem> postagem;

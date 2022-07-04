@@ -12,6 +12,7 @@ public class UsuarioLogin {
 	private String usuario;
 	private String senha;
 	private String foto;
+	private String tipo;
 	private String token;
 	
 	public UsuarioLogin(Long id, String nome, String usuario, String senha, String foto, String token) {
